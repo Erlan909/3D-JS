@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+ <script src="three.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000)
+        camera.position.z = 15
+
+        renderer = new THREE.WebGLRenderer({alpha:true, antialias:true})
+        renderer.setClearColor(0x000000,0)
+        renderer.setSize(1280, 720)
+
+        renderer.domElement.setAttribute('id', 'Shoes')
+        document.body.insertBefore(renderer.domElement, document.body.firstChild)
+
+
+        const alight = new THREE.AmbientLight(0x404040, 1)
+        const plight = new THREE.PointLight(0xFFFFFF, 1)
+        scene.add(alight)
+        plight.position.set(15,25,15)
+        scene.add(plight)
+
+
+        let lodaer = new THREE.GLTFLoader()
+        let obj = null
+        lodaer.load('/3d/scene.gltf', function(gltf){
+             obj = gltf 
+             obj.scene.scale.set(1,1, 1)
+             scene.add(obj.scene)
+        })
+        document.addEventListener('keydown', (e)=>{
+            if (e.key == 'w'){
+                obj.scene.rotation.x -=0.05
+            }
+            if (e.key == 's'){
+                obj.scene.rotation.x +=0.05           
+             }
+             if (e.key == 'd'){
+                obj.scene.rotation.y +=0.05           
+             }
+             if (e.key == 'a'){
+                obj.scene.rotation.y -=0.05           
+             }
+             if (e.key == 'f'){
+                 camera.position.z +=1
+             }
+             if (e.key == 'e'){
+                 camera.position.z -=1
+             }
+        })
+
+        function draw(){
+             requestAnimationFrame(draw)
+
+            //  obj.scene.rotation.y+=0.005
+
+             renderer.render(scene, camera)
+        }
+        draw()
+    </script>
+
+</body>
+</html>
